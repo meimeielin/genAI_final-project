@@ -1,0 +1,21 @@
+digraph F {
+  rankdir=TB; bgcolor=white; pad=0.3; nodesep=0.3; ranksep=0.4;
+  node [fontname="Noto Sans CJK TC", fontsize=12, style=filled, fillcolor="#D6EAF8", color="#555555", shape=box];
+  edge [fontname="Noto Sans CJK TC", fontsize=10, color="#666666"];
+  label="使用者流程圖"; labelloc=t; fontname="Noto Sans CJK TC Bold"; fontsize=20;
+  start [label="進入網站", shape=oval, fillcolor="#FDEBD0"];
+  consent [label="閱讀說明並同意\n（教育用途、不取代專業）", fillcolor="#FCF3CF"];
+  choose [label="選擇功能", shape=diamond, fillcolor="#FCF3CF"];
+  k1 [label="📖 知識問答\n輸入問題"]; k2 [label="RAG 檢索 → 回答\n附引用來源"];
+  p1 [label="👂 視角轉換\n輸入一句話 + 選角色"]; p2 [label="扭曲後的內心聲音\n+ 認知機制解析\n+ 更好的說法"];
+  r1 [label="💬 反向翻譯\n輸入對方說的話"]; r2 [label="可能的感受與需要\n+ 建議回應"];
+  t1 [label="🎭 對話演練\n選角色 + 情境"]; t2 [label="與角色多回合對話\n教練每回合評分"]; t3 [label="演練報告\n分數趨勢、改進建議"];
+  more [label="再試一次？", shape=diamond, fillcolor="#FCF3CF"];
+  end [label="結束\n（顯示求助資源）", shape=oval, fillcolor="#FDEBD0"];
+  start -> consent -> choose;
+  choose -> k1; choose -> p1; choose -> r1; choose -> t1;
+  k1 -> k2; p1 -> p2; r1 -> r2; t1 -> t2 -> t3;
+  t2 -> t2 [label="下一回合"];
+  {k2 p2 r2 t3} -> more;
+  more -> choose [label="是"]; more -> end [label="否"];
+}

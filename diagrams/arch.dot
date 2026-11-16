@@ -1,0 +1,35 @@
+digraph G {
+  rankdir=TB; bgcolor=white; pad=0.4; nodesep=0.35; ranksep=0.55; newrank=true;
+  node [shape=box, style="rounded,filled", fontname="Noto Sans CJK TC", fontsize=13, color="#555555", width=1.8];
+  edge [fontname="Noto Sans CJK TC", fontsize=11, color="#666666"];
+  label="MindBridge 心橋 系統架構圖"; labelloc=t; fontname="Noto Sans CJK TC Bold"; fontsize=22;
+
+  subgraph cluster_fe { label="① 前端"; style="rounded,dashed"; color="#999999"; fontname="Noto Sans CJK TC";
+    web [label="Next.js + Tailwind 網頁\n知識問答｜視角轉換｜反向翻譯｜對話演練", fillcolor="#FDEBD0", width=5];
+  }
+  subgraph cluster_be { label="② 後端 FastAPI + LangGraph 多 Agent 編排"; style="rounded,dashed"; color="#999999"; fontname="Noto Sans CJK TC";
+    guard [label="🛡 SafetyGuard（輸入）\n危機偵測 → 立即提供求助資源", fillcolor="#FADBD8", width=4];
+    router [label="🔀 Router Agent\n判斷意圖、分派任務", fillcolor="#D6EAF8", width=3];
+    ka [label="📖 Knowledge\n知識問答", fillcolor="#D6EAF8"];
+    pa [label="👂 Perspective\n視角轉換", fillcolor="#D6EAF8"];
+    ra [label="💬 Reverse\n反向翻譯", fillcolor="#D6EAF8"];
+    rp [label="🎭 Persona ⇄ 🎯 Coach\n多回合對話演練", fillcolor="#D6EAF8", width=2.4];
+    guard2 [label="🛡 SafetyGuard（輸出）\n審查內容、附免責與引用", fillcolor="#FADBD8", width=4];
+  }
+  subgraph cluster_data { label="③ 知識與模型層"; style="rounded,dashed"; color="#999999"; fontname="Noto Sans CJK TC";
+    vdb [label="📚 RAG 向量資料庫\nChroma / pgvector\n衛教資料、診斷準則摘要\n溝通指引、認知扭曲", fillcolor="#D5F5E3", width=3];
+    llm [label="🤖 LLM\nGPT / Gemini /\nOllama 本機模型", fillcolor="#E8DAEF", width=2.4];
+    db [label="🗄 資料庫\n演練紀錄、分數\n使用者回饋", fillcolor="#FCF3CF", shape=cylinder, width=2.2];
+  }
+  {rank=same; ka; pa; ra; rp;}
+  {rank=same; vdb; llm; db;}
+
+  web -> guard [label=" 使用者輸入"];
+  guard -> router;
+  router -> ka; router -> pa; router -> ra; router -> rp;
+  ka -> guard2; pa -> guard2; ra -> guard2; rp -> guard2;
+  guard2 -> vdb [label=" 檢索相關段落", dir=back, style=dashed, constraint=true];
+  guard2 -> llm [label=" 提示詞 + 資料", dir=back, style=dashed];
+  guard2 -> db [label=" 儲存紀錄", dir=back, style=dashed];
+  guard2 -> web [label=" 結果 + 引用來源", constraint=false, color="#2E86C1", fontcolor="#2E86C1"];
+}

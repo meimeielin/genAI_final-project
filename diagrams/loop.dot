@@ -1,0 +1,20 @@
+digraph L {
+  rankdir=LR; bgcolor=white; pad=0.3; nodesep=0.5; ranksep=0.6;
+  node [fontname="Noto Sans CJK TC", fontsize=12, style="rounded,filled", color="#555555", shape=box];
+  edge [fontname="Noto Sans CJK TC", fontsize=10, color="#666666"];
+  label="對話演練：多 Agent 協作迴圈"; labelloc=t; fontname="Noto Sans CJK TC Bold"; fontsize=20;
+  user [label="👤 使用者\n輸入回應", fillcolor="#FDEBD0"];
+  guard [label="🛡 SafetyGuard", fillcolor="#FADBD8"];
+  coach [label="🎯 Coach Agent\n依溝通指引評分 1~5\n指出優點與改進", fillcolor="#D6EAF8"];
+  persona [label="🎭 Persona Agent\n依症狀特徵與對話記憶\n產生角色回覆", fillcolor="#D6EAF8"];
+  rag [label="📚 RAG\n症狀語言特徵\n支持性溝通原則", fillcolor="#D5F5E3"];
+  mem [label="🧠 對話記憶\n角色狀態（信任度）", fillcolor="#FCF3CF"];
+  report [label="📊 演練報告", fillcolor="#E8DAEF"];
+  user -> guard [label="輸入"]; guard -> coach [label="安全"];
+  guard -> report [label="危機 → 中止並提供資源", color="#C0392B", fontcolor="#C0392B"];
+  coach -> persona [label="評分影響信任度"];
+  persona -> user [label="角色回覆"];
+  rag -> coach [style=dashed]; rag -> persona [style=dashed];
+  persona -> mem [dir=both, style=dashed];
+  coach -> report [label="結束時彙整", style=dashed];
+}
